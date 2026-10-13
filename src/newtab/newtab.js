@@ -8508,7 +8508,11 @@
     : Promise.resolve(true);
   const initialFontsReadyTask = document.fonts && document.fonts.ready &&
     typeof document.fonts.ready.then === 'function'
-      ? document.fonts.ready.catch(() => true)
+      // Fonts use font-display: swap, so a slow font must not hold the first reveal.
+      ? Promise.race([
+        document.fonts.ready.catch(() => true),
+        new Promise((resolve) => setTimeout(resolve, 300, true))
+      ])
       : Promise.resolve(true);
   observeNewtabStartupTask('fonts', initialFontsReadyTask);
   observeNewtabStartupTask('quote', initialQuoteReadyTask);
