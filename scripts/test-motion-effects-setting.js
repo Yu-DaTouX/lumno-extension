@@ -123,7 +123,7 @@ assert.match(
 );
 assert.match(
   newtabSource,
-  /initialMotionPreferenceReadyTask[\s\S]*initialVisualReadyPromise = Promise\.all\([\s\S]*initialMotionPreferenceReadyTask[\s\S]*initialLanguageReadyTask[\s\S]*sectionPolicyReadyPromise[\s\S]*initialShortcutsReadyTask[\s\S]*initialFontsReadyTask[\s\S]*const recentSitesReadyTask = loadRecentSites\(\{[\s\S]*?force: true[\s\S]*?const bookmarksReadyTask = loadBookmarks\(\{[\s\S]*?force: true[\s\S]*?return Promise\.all\(\[recentSitesReadyTask, bookmarksReadyTask\]\);[\s\S]*markNewtabReady\(\)/,
+  /initialMotionPreferenceReadyTask[\s\S]*initialContentReadyPromise = Promise\.all\([\s\S]*initialLanguageReadyTask[\s\S]*sectionPolicyReadyPromise[\s\S]*initialShortcutsReadyTask[\s\S]*const recentSitesReadyTask = loadRecentSites\(\{[\s\S]*?force: true[\s\S]*?const bookmarksReadyTask = loadBookmarks\(\{[\s\S]*?force: true[\s\S]*?return Promise\.all\(\[recentSitesReadyTask, bookmarksReadyTask\]\);[\s\S]*initialVisualReadyPromise = Promise\.all\([\s\S]*initialMotionPreferenceReadyTask[\s\S]*initialFontsReadyTask[\s\S]*initialContentReadyPromise[\s\S]*markNewtabReady\(\)/,
   'animated and motion-free New Tabs should wait for stable text and visible sections before one atomic reveal'
 );
 

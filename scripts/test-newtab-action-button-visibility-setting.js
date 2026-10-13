@@ -58,7 +58,7 @@ assert.match(
 
 assert.match(
   newtabSource,
-  /const actionButtonVisibilityReadyPromise = loadNewtabActionButtonVisibility\(\);[\s\S]*?const initialVisualReadyPromise = Promise\.all\(\[[\s\S]*?actionButtonVisibilityReadyPromise/,
+  /const actionButtonVisibilityReadyPromise = loadNewtabActionButtonVisibility\(\);[\s\S]*?const initialContentReadyPromise = Promise\.all\(\[[\s\S]*?actionButtonVisibilityReadyPromise/,
   'visibility preferences should resolve before New Tab becomes visually ready'
 );
 

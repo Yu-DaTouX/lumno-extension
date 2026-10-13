@@ -372,6 +372,8 @@
     store: NEWTAB_BOOKMARKS_STORE,
     normalizeHost
   });
+  // Read the bookmark tree now so the first bookmark render does not wait for it.
+  bookmarksRuntime.ensureReady(false).catch(() => {});
 
   const NEWTAB_CONTEXT_MENU_OPEN_VALUE = 'open-in-new-tab';
   const SHORTCUT_CONTEXT_MENU_EDIT_VALUE = 'edit';
@@ -8516,20 +8518,19 @@
       : Promise.resolve(true);
   observeNewtabStartupTask('fonts', initialFontsReadyTask);
   observeNewtabStartupTask('quote', initialQuoteReadyTask);
-  const initialVisualReadyPromise = Promise.all([
-    initialAppearanceReadyTask,
+  // The bookmark and history queries only depend on the layout preferences, so start them as soon as
+  // those settle instead of after the wallpaper, effect, fonts and quote have also finished; the
+  // reveal below still waits for all of them.
+  const initialContentReadyPromise = Promise.all([
     initialBookmarkViewModeReadyPromise,
     loadZenMode(),
     actionButtonVisibilityReadyPromise,
-    initialMotionPreferenceReadyTask,
     initialLanguageReadyTask,
     sectionPolicyReadyPromise,
     initialShortcutsReadyTask,
     initialPinnedRecentSitesReadyTask,
     initialHiddenRecentSitesReadyTask,
-    initialLayoutStorageReadyTask,
-    initialFontsReadyTask,
-    initialQuoteReadyTask
+    initialLayoutStorageReadyTask
   ]).catch((error) => {
     console.warn('[Lumno] Initial new tab layout setup failed.', error);
   }).then(() => {
@@ -8551,6 +8552,15 @@
     return Promise.all([recentSitesReadyTask, bookmarksReadyTask]);
   }).catch((error) => {
     console.warn('[Lumno] Initial new tab content setup failed.', error);
+  });
+  const initialVisualReadyPromise = Promise.all([
+    initialAppearanceReadyTask,
+    initialMotionPreferenceReadyTask,
+    initialFontsReadyTask,
+    initialQuoteReadyTask,
+    initialContentReadyPromise
+  ]).catch((error) => {
+    console.warn('[Lumno] Initial new tab visual setup failed.', error);
   }).then(() => {
     maybeShowFileAccessNotice();
     markNewtabReady();
